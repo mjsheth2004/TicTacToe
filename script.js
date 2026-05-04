@@ -1,5 +1,4 @@
 console.log("Welcome to Tic Tac Toe")
-
 let boxtext = document.querySelectorAll(".box");
 let wel = document.querySelector(".welcome")
 let msgContainer  = document.querySelector(".winner");
@@ -14,8 +13,10 @@ let audioTurn = new Audio("ting.mp3")
 let gameover = new Audio("gameover.mp3")
 let congratulation = new Audio("congratulation.mp3")
 
-let turnx=true;
+// Loop congratulation audio continuously
+congratulation.loop = true;
 
+let turnx=true;
 
 const checkWin = ()=>{
     let wins = [
@@ -28,12 +29,10 @@ const checkWin = ()=>{
         [0,4,8],
         [2,4,6],
      ]
-
     wins.forEach(e =>{
         if((boxtext[e[0]].innerText === boxtext[e[1]].innerText) && (boxtext[e[2]].innerText === boxtext[e[1]].innerText) && (boxtext[e[0]].innerText !== "") ){
             winmessage(boxtext[e[0]].innerText);
         }                
-
         else
             {
                 count=count+1;
@@ -58,7 +57,7 @@ const drawmessage = () =>
 
 const winmessage = (winner) =>
     {
-        congratulation.play();
+        congratulation.play();   // plays in loop because .loop = true
         msg.innerText=`CONGRATULATIONS, WINNER IS : ${winner}`;
         win = true;
         wel.classList.add("hide");
@@ -67,13 +66,12 @@ const winmessage = (winner) =>
         newgame.classList.remove("hide");
         Mygame.classList.add("hide");
         reset.classList.add("hide");
-
     };
 
 boxtext.forEach((box) =>
 {
     box.addEventListener("click", ()=>{
-    audioTurn.play();
+        audioTurn.play();
         if(turnx)
         {
             box.innerText="X";
@@ -92,6 +90,10 @@ boxtext.forEach((box) =>
 
 const reset1 =()=>
     {
+        // Stop congratulation loop when new game / reset is pressed
+        congratulation.pause();
+        congratulation.currentTime = 0;
+
         turnx=true;
         win=false;
         count=0;
@@ -107,7 +109,6 @@ const reset1 =()=>
         wel.classList.remove("hide");
         Mygame.classList.remove("hide");
         reset.classList.remove("hide");
-
     }
 
 reset.addEventListener("click", reset1);
